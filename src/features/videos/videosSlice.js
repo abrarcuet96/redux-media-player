@@ -7,7 +7,7 @@ const initialState = {
   isError: false,
   error: "",
 };
-const fetchVideos = createAsyncThunk("videos/fetchVideos", async () => {
+export const fetchVideos = createAsyncThunk("videos/fetchVideos", async () => {
   const videos = await getVideos();
   return videos;
 });
@@ -18,8 +18,7 @@ const videosSlice = createSlice({
     builder
       .addCase(fetchVideos.pending, (state) => {
         state.isLoading = true;
-        state.error = "";
-        state.videos = [];
+        state.isError = false;
       })
       .addCase(fetchVideos.fulfilled, (state, action) => {
         state.isLoading = false;

@@ -1,4 +1,4 @@
-import Tags from "../components/videos/Tags";
+import Tags from "../components/tags/Tags";
 import VideoGrid from "../components/videos/VideoGrid";
 
 const HomePage = () => {
