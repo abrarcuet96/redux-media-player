@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import RelatedVideoCard from "../components/relatedVideos/RelatedVideoCard";
 import VideoDescription from "../components/relatedVideos/VideoDescripton";
 import VideoPlayer from "../components/relatedVideos/VideoPlayer";
-import { fetchVideo } from "../features/relatedVideos/relatedVideoSlice";
+import { fetchVideo } from "../features/video/videoSlice";
 
 const VideoPage = () => {
   const dispatch = useDispatch();
