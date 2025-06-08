@@ -1,37 +1,33 @@
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchRelatedVideos } from "../../features/relatedVideos/relatedVideosSlice";
+import RelatedVideoItem from "./RelatedVideoItem";
 
-const RelatedVideoCard = () => {
-  return (
-    <div className="w-full flex flex-row gap-2 mb-4">
-      <div className="relative w-[168px] h-[94px] flex-none duration-300 hover:scale-[1.03]">
-        <Link to="/video">
-          <img
-            src="https://i.ytimg.com/vi/O02GFZrZg3E/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBdDE2neMfoVDxPDBWJVkTihm6r4Q"
-            className="object-cover w-full h-full"
-            alt="Some video title"
-          />
-        </Link>
-        <p className="absolute right-2 bottom-2 bg-gray-900 text-gray-100 text-xs px-1 py">
-          12:10
-        </p>
-      </div>
-
-      <div className="flex flex-col w-full">
-        <Link to="/video">
-          <p className="text-slate-900 text-sm font-semibold">
-            Some video title
-          </p>
-        </Link>
-        <Link
-          className="text-gray-400 text-xs mt-2 hover:text-gray-600"
-          href="#"
-        >
-          Redux Media Application
-        </Link>
-        <p className="text-gray-400 text-xs mt-1">100K views . 23 Oct 2022</p>
-      </div>
-    </div>
+const RelatedVideoCard = ({ currentVideoId, tags }) => {
+  const dispatch = useDispatch();
+  const { relatedVideos, isLoading, isError, error } = useSelector(
+    (state) => state.relatedVideos
   );
+  useEffect(() => {
+    dispatch(fetchRelatedVideos({ tags, id: currentVideoId }));
+  }, [dispatch, tags, currentVideoId]);
+
+  let content = null;
+  if (isLoading) {
+    content = <div className="col-span-12">Loading ...</div>;
+  }
+  if (!isLoading && isError) {
+    content = <div className="col-span-12">{error}</div>;
+  }
+  if (!isLoading && !isError && relatedVideos.length === 0) {
+    content = <div className="col-span-12">"No videos found."</div>;
+  }
+  if (!isLoading && !isError && relatedVideos.length > 0) {
+    content = relatedVideos.map((video) => (
+      <RelatedVideoItem key={video.id} video={video} />
+    ));
+  }
+  return <div className="w-full flex flex-col gap-2 mb-4">{content}</div>;
 };
 
 export default RelatedVideoCard;
